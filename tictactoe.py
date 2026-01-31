@@ -3,6 +3,8 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
+from turtle import fd
 
 X = "X"
 O = "O"
@@ -35,18 +37,27 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
+    possible_actions = set()
     for i in range(3):
         for j in range(3):
             if board[i][j] == EMPTY:
-                (i, j)
-    raise NotImplementedError
+                possible_actions.add((i, j))
+
+    return possible_actions    
 
 
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    new_board = copy.deepcopy(board)
+    i, j = action
+    current_player = player(board)
+    if board[i][j] == EMPTY:
+        new_board[i][j] = current_player
+        return new_board
+    else:
+        raise ValueError("Invalid action: position is not empty")
 
 
 def winner(board):
