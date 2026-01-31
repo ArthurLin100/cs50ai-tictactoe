@@ -92,14 +92,19 @@ def terminal(board):
     elif board.count(EMPTY) == 0: # board is full
         return True
     else: # game is not over
-        return False    
+        return False
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    if winner(board) == X:
+        return 1
+    elif winner(board) == O:
+        return -1
+    else:
+        return 0    
 
 
 def minimax(board):
