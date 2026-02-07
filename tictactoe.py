@@ -54,7 +54,7 @@ def result(board, action):
     new_board = copy.deepcopy(board)
     i, j = action
     current_player = player(board)
-    if board[i][j] == EMPTY:
+    if board[i][j] == EMPTY and 0 <= i <= 2 and 0 <= j <= 2:
         new_board[i][j] = current_player
         return new_board
     else:
@@ -88,13 +88,13 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    if winner(board) is not None: # there is winner
+    if winner(board) is not None:  # there is winner
         return True
     
     for row in board:
         for cell in row:
             if cell == EMPTY:
-                return False # game is on going
+                return False  # game is on going
     return True     
 
 
@@ -107,7 +107,8 @@ def utility(board):
     elif winner(board) == O:
         return -1
     else:
-        return 0    
+        return 0
+
 
 def max_value(board):
     if terminal(board):
@@ -116,6 +117,7 @@ def max_value(board):
     for action in actions(board):
         v = max(v, min_value(result(board, action)))
     return v
+
 
 def min_value(board):
     if terminal(board):
@@ -134,20 +136,20 @@ def minimax(board):
         return None
     
     current_player = player(board)
-    if current_player == X: # maximizing player
+    if current_player == X:  # maximizing player
         best_action = None
         best_value = -math.inf
         for action in actions(board):            
-            this_min = min_value(result(board, action)) # oponent's best value
-            if (this_min > best_value): # finding the maximum this_min
+            this_min = min_value(result(board, action))  # oponent's best value
+            if (this_min > best_value):  # finding the maximum this_min
                 best_action = action
                 best_value = this_min                        
-    else: # current_player == O minimzing player
+    else:  # current_player == O minimzing player
         best_action = None
         best_value = math.inf
         for action in actions(board):            
-            this_max = max_value(result(board, action)) # oponent's best value
-            if (this_max < best_value): #finidng the minimum this_max
+            this_max = max_value(result(board, action))  # oponent's best value
+            if (this_max < best_value):  # finidng the minimum this_max
                 best_action = action
                 best_value = this_max                                
 
