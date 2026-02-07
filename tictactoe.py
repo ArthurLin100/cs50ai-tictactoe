@@ -114,7 +114,7 @@ def max_value(board):
         return utility(board)
     v = -math.inf
     for action in actions(board):
-        v = max(v, min_value(result(action, board)))
+        v = max(v, min_value(result(board, action)))
     return v
 
 def min_value(board):
@@ -122,7 +122,7 @@ def min_value(board):
         return utility(board)
     v = math.inf
     for action in actions(board):
-        v = min(v, max_value(result(action, board)))
+        v = min(v, max_value(result(board, action)))
     return v
 
 
