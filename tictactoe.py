@@ -23,11 +23,12 @@ def initial_state():
 def player(board):
     """
     Returns player who has the next turn on a board.
-    """
+    """    
     if not board:
         return X
     
-    if board.count(X) > board.count(O):
+    flat = [cell for row in board for cell in row]    
+    if flat.count(X) > flat.count(O):
         return O
     else:
         return X
@@ -89,10 +90,12 @@ def terminal(board):
     """
     if winner(board) is not None: # there is winner
         return True
-    elif board.count(EMPTY) == 0: # board is full
-        return True
-    else: # game is not over
-        return False
+    
+    for row in board:
+        for cell in row:
+            if cell == EMPTY:
+                return False # game is on going
+    return True     
 
 
 def utility(board):
@@ -106,9 +109,46 @@ def utility(board):
     else:
         return 0    
 
+def max_value(board):
+    if terminal(board):
+        return utility(board)
+    v = -math.inf
+    for action in actions(board):
+        v = max(v, min_value(result(action, board)))
+    return v
+
+def min_value(board):
+    if terminal(board):
+        return utility(board)
+    v = math.inf
+    for action in actions(board):
+        v = min(v, max_value(result(action, board)))
+    return v
+
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+    
+    current_player = player(board)
+    if current_player == X: # maximizing player
+        best_action = None
+        best_value = -math.inf
+        for action in actions(board):            
+            this_min = min_value(result(board, action)) # oponent's best value
+            if (this_min > best_value): # finding the maximum this_min
+                best_action = action
+                best_value = this_min                        
+    else: # current_player == O minimzing player
+        best_action = None
+        best_value = math.inf
+        for action in actions(board):            
+            this_max = max_value(result(board, action)) # oponent's best value
+            if (this_max < best_value): #finidng the minimum this_max
+                best_action = action
+                best_value = this_max                                
+
+    return best_action
